@@ -48,7 +48,7 @@ ESP32 → MQTT → Node-RED → Dashboard
 
 ## 📷 Diagrama do Circuito
 
-![Circuito](./Circuito.png)
+![Circuito]([./Circuito.png](https://github.com/flateloaluno/Monitor-reservatorio/blob/main/Circuito.png))
 
 ---
 
