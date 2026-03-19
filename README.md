@@ -1,5 +1,8 @@
 # **Projeto IoT – Monitoramento de Reservatório com ESP32**
 
+## 📷 Foto: 
+https://github.com/flateloaluno/Monitor-reservatorio/blob/main/Foto%20do%20projeto.jpeg
+
 ## Descrição
 
 Este projeto tem como objetivo o desenvolvimento de uma aplicação completa de **Internet das Coisas (IoT)** para monitoramento de nível de um reservatório de água e acionamento automátio de uma bomba ligada a um poço artesiano para encher o reservatório caso seja necessário.
@@ -48,11 +51,11 @@ ESP32 → MQTT → Node-RED → Dashboard
 
 ## 📷 Diagrama do Circuito
 
-![Circuito]([./Circuito.png](https://github.com/flateloaluno/Monitor-reservatorio/blob/main/Circuito.png))
+https://github.com/flateloaluno/Monitor-reservatorio/blob/main/Circuito.png
 
 ---
 
-## 🔗 Ligações dos Componentes
+## Ligações dos Componentes
 
 ### ESP32
 
