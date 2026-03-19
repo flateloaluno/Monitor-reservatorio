@@ -1,0 +1,457 @@
+[
+    {
+        "id": "0db869b7cece7315",
+        "type": "mqtt in",
+        "z": "1118086bb715c586",
+        "name": "Sensor Nivel",
+        "topic": "sensor/nivel",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "mqtt_broker",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 140,
+        "y": 120,
+        "wires": [
+            [
+                "a60a95899229da43",
+                "d44e32bfe3828741"
+            ]
+        ]
+    },
+    {
+        "id": "a60a95899229da43",
+        "type": "function",
+        "z": "1118086bb715c586",
+        "name": "Converter Numero",
+        "func": "msg.payload = Number(msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 120,
+        "wires": [
+            [
+                "8837d3bf4c5e3776",
+                "fb105dceda0d2681",
+                "eb932d28aa54664d",
+                "d9af3a3964995edb"
+            ]
+        ]
+    },
+    {
+        "id": "eb932d28aa54664d",
+        "type": "function",
+        "z": "1118086bb715c586",
+        "name": "Status Nivel",
+        "func": "var nivel = msg.payload;\n\nif(nivel < 20){\n     msg.payload = {nivel:nivel,status:\"CRITICO\",alert:1};\n}\n\nelse if(nivel < 80){\n     msg.payload = {nivel:nivel,status:\"BOM\",alert:0};\n}\n\nelse\n{ msg.payload = {nivel:nivel,status:\"CHEIO\",alert:0};\n}\n\n return msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 200,
+        "wires": [
+            [
+                "aa8f6c3cd5e9848c",
+                "b8f92a866b94d51b"
+            ]
+        ]
+    },
+    {
+        "id": "b8f92a866b94d51b",
+        "type": "function",
+        "z": "1118086bb715c586",
+        "name": "Insert MySQL",
+        "func": "var n = msg.payload.nivel;\nvar s = msg.payload.status;\nmsg.topic = \"INSERT INTO sensores (nivel,status) VALUES (\" \n+ msg.payload.nivel + \",'\" + msg.payload.status + \"')\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 300,
+        "wires": [
+            [
+                "e39afe8888b0a39b"
+            ]
+        ]
+    },
+    {
+        "id": "11e07ad32699d74c",
+        "type": "inject",
+        "z": "1118086bb715c586",
+        "name": "Simular Sensor",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "5",
+        "payload": "0",
+        "payloadType": "num",
+        "x": 170,
+        "y": 520,
+        "wires": [
+            [
+                "d56ab779b09ae3e4"
+            ]
+        ]
+    },
+    {
+        "id": "d56ab779b09ae3e4",
+        "type": "function",
+        "z": "1118086bb715c586",
+        "name": "Gerar Nivel",
+        "func": "msg.payload = Math.floor(Math.random()*100);\nreturn msg;",
+        "outputs": 1,
+        "x": 350,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "df723053058d5f53",
+        "type": "mqtt out",
+        "z": "1118086bb715c586",
+        "name": "Publicar Nivel",
+        "topic": "sensor/nivel",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "ea82e6da4087fe27",
+        "x": 620,
+        "y": 520,
+        "wires": []
+    },
+    {
+        "id": "be613c7ea0526e30",
+        "type": "mqtt out",
+        "z": "1118086bb715c586",
+        "name": "Comando Bomba",
+        "topic": "sensor/bomba",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "ea82e6da4087fe27",
+        "x": 670,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "bb8bebc344bee65f",
+        "type": "ui_switch",
+        "z": "1118086bb715c586",
+        "name": "Controle Bomba",
+        "label": "Bomba",
+        "tooltip": "",
+        "group": "grupo_dashboard",
+        "width": "",
+        "height": "",
+        "passthru": true,
+        "decouple": "false",
+        "topic": "",
+        "topicType": "str",
+        "onvalue": "ON",
+        "onvalueType": "str",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "OFF",
+        "offvalueType": "str",
+        "officon": "",
+        "offcolor": "",
+        "animate": true,
+        "className": "",
+        "x": 470,
+        "y": 400,
+        "wires": [
+            [
+                "be613c7ea0526e30",
+                "79c22e1bb8f5ea6b"
+            ]
+        ]
+    },
+    {
+        "id": "aa8f6c3cd5e9848c",
+        "type": "ui_text",
+        "z": "1118086bb715c586",
+        "group": "grupo_dashboard",
+        "width": "",
+        "height": "",
+        "name": "Status",
+        "label": "Status",
+        "format": "{{msg.payload.status}}",
+        "layout": "",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": "",
+        "color": "#000000",
+        "x": 600,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "8837d3bf4c5e3776",
+        "type": "ui_gauge",
+        "z": "1118086bb715c586",
+        "name": "Nivel Reservatorio",
+        "group": "grupo_dashboard",
+        "width": "",
+        "height": "",
+        "gtype": "wave",
+        "title": "Nível Reservatório",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": 100,
+        "colors": [
+            "#ca3838",
+            "#00a1e6",
+            "#33fffc"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 600,
+        "y": 80,
+        "wires": []
+    },
+    {
+        "id": "fb105dceda0d2681",
+        "type": "ui_chart",
+        "z": "1118086bb715c586",
+        "name": "Historico Nivel",
+        "group": "grupo_dashboard",
+        "width": "",
+        "height": "",
+        "label": "Histórico",
+        "chartType": "line",
+        "xformat": "HH:mm:ss",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": "1",
+        "removeOlderPoints": "1000",
+        "removeOlderUnit": "60",
+        "cutout": "",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 600,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "79c22e1bb8f5ea6b",
+        "type": "ui_led",
+        "z": "1118086bb715c586",
+        "group": "grupo_dashboard",
+        "width": "",
+        "height": "",
+        "label": "Nível Crítico",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "ON",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": false,
+        "name": "Alerta Critico",
+        "x": 830,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e39afe8888b0a39b",
+        "type": "mysql",
+        "z": "1118086bb715c586",
+        "mydb": "mysql_config",
+        "name": "Salvar Banco",
+        "x": 600,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d44e32bfe3828741",
+        "type": "debug",
+        "z": "1118086bb715c586",
+        "name": "debug",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 350,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "d9af3a3964995edb",
+        "type": "function",
+        "z": "1118086bb715c586",
+        "name": "Func. Acionar Bomba",
+        "func": "var nivel = msg.payload;\n\n// Recupera estado anterior da bomba (para evitar ficar ligando/desligando toda hora)\nvar estado = flow.get(\"bomba\") || \"OFF\";\n\nif (nivel < 20 && estado !== \"ON\") {\n    estado = \"ON\";\n}\nelse if (nivel > 80 && estado !== \"OFF\") {\n    estado = \"OFF\";\n}\n\n// Salva estado\nflow.set(\"bomba\", estado);\n\n// Envia comando\nmsg.payload = estado;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 400,
+        "wires": [
+            [
+                "bb8bebc344bee65f"
+            ]
+        ]
+    },
+    {
+        "id": "3bfa888f382e11d4",
+        "type": "comment",
+        "z": "1118086bb715c586",
+        "name": "",
+        "info": "Campos adicionais utilizados para simular\no fluxo sem conexão com sensor real.",
+        "x": 100,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "mqtt_broker",
+        "type": "mqtt-broker",
+        "name": "Broker MQTT",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 15,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ea82e6da4087fe27",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "grupo_dashboard",
+        "type": "ui_group",
+        "name": "Reservatório",
+        "tab": "tab_dashboard",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "mysql_config",
+        "type": "MySQLdatabase",
+        "name": "Banco IoT",
+        "host": "localhost",
+        "port": "3306",
+        "db": "iot",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "tab_dashboard",
+        "type": "ui_tab",
+        "name": "Dashboard IoT",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "a6cdf5d89ed0d211",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-dashboard": "3.6.6",
+            "node-red-contrib-ui-led": "0.4.11",
+            "node-red-node-mysql": "3.0.0"
+        }
+    }
+]
