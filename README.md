@@ -5,7 +5,7 @@ https://github.com/flateloaluno/Monitor-reservatorio/blob/main/Foto%20do%20proje
 
 ## Descrição
 
-Este projeto tem como objetivo o desenvolvimento de uma aplicação completa de **Internet das Coisas (IoT)** para monitoramento de nível de um reservatório de água e acionamento automátio de uma bomba ligada a um poço artesiano para encher o reservatório caso seja necessário.
+Este projeto tem como objetivo o desenvolvimento de uma aplicação completa de **Internet das Coisas (IoT)** para monitoramento de nível de um reservatório de água e acionamento automátio de uma bomba ligada a um poço artesiano para encher o reservatório em caso de nível crítico, garantindo o abastecimento em propriedades rurais e/ou lugares com acesso limitado de água.
 
 Foram utilizados:
 * Microcontrolador ESP32
